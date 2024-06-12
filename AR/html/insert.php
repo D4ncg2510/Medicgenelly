@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "usuario";
 $password = "contraseña";
-$database = "base_de_datos";
+$database = "medicgenely";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
