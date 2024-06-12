@@ -35,9 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //Proceso de Registro de usuario
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["registrar_paciente"])) {
-    // Verificar si el usuario ha iniciado sesión
     if (isset($_SESSION["user_id"])) {
         $user_id = $_SESSION["user_id"];
 
@@ -65,7 +63,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["registrar_paciente"]))
         echo "Debes iniciar sesión para registrar un paciente.";
     }
 }
-
 $conn->close();
-
 ?>
