@@ -66,33 +66,33 @@
         </div> <!-- .container -->
       </nav>
     </header>
-    
+    <!--registro-->
 <div class="container" id="container">
     <div class="form-container sign-up">
-        <form>
+        <form action="../php/registro_usu.php" method="post" class="formulario_reg">
             <h1>Crear cuenta</h1>
             <div class="social-icons">
                 <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                 <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
             </div>
             <span>o utilice su correo electrónico para registrarse:</span>
-            <input type="text" placeholder="Name">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Password">
+            <input type="text" placeholder="Nombre" name="Nombre">
+            <input type="email" placeholder="Correo electrónico"  name="Correo">
+            <input type="password" placeholder="Constraseña" name="Constraseña">
             <button>Iniciar sesión</button>
         </form>
     </div>
+    <!--ES LA PARTE DEL LOGIN ES DECIR INICIAR SESION-->
     <div class="form-container sign-in">
-        <form>
+        <form action="" class="formulario_log">
             <h1>Iniciar sesión</h1>
             <div class="social-icons">
                 <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                 <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
             </div>
             <span>o utilice su contraseña de correo electrónico:</span>
-            <input type="email" placeholder="Email" name="username" required>
-            <input type="password" placeholder="Password" name="password" required>
-            <a href="#">¿Ha olvidado su contraseña?</a>
+            <input type="email" placeholder="Correo electrónico"  required>
+            <input type="password" placeholder="Contraseña" required>
             <button value="Iniciar Sesión">Iniciar sesión</button>
         </form>
     </div>
