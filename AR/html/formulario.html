@@ -121,6 +121,27 @@
 
             <button type="submit">Registrar</button>
         </form>
+        <script>
+          $('#pacienteForm').submit(function(event) {
+              event.preventDefault(); 
+      
+              var formData = $(this).serialize();
+      
+              $.ajax({
+                  type: 'POST',
+                  url: 'insert.php', 
+                  data: formData,
+                  success: function(response) {
+                      // Manejar la respuesta del servidor
+                      console.log(response);
+                  },
+                  error: function() {
+
+                      console.log('Error en la solicitud AJAX');
+                  }
+              });
+          });
+      </script>
         <button type="submit" value="Iniciar Sesion">Inicio de sesión</button>
     </div>
 </div>
