@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="copyright" content="MACode ID, https://macodeid.com/">
   <link rel="icon" href="LOGOs.png">
-  <title>Medicgenely</title>
+  <title>Medicgenely - Chat con Doctor</title>
   <link rel="stylesheet" href="maicons.css">
   <link rel="stylesheet" href="bootstrap.css">
   <link rel="stylesheet" href="owl.carousel.css">
@@ -49,15 +49,27 @@
 
   <div class="container mt-5">
     <div class="row">
+      <div class="col-md-4">
+        <h2>Pacientes</h2>
+        <ul id="pacienteList" class="list-group">
+          <!-- Aquí se cargarán los pacientes -->
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Paciente 1
+            <span class="badge badge-primary badge-pill">Activo</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Paciente 2
+            <span class="badge badge-secondary badge-pill">Offline</span>
+          </li>
+        </ul>
+      </div>
       <div class="col-md-8">
         <input type="hidden" id="clientId" value="">
-        <button id="activateChatbot" class="btn btn-secondary mb-3">Activar Chatbot</button>
         <div class="chat-container">
           <div id="messageList" class="list-group">
             <!-- Aquí se cargarán los mensajes -->
           </div>
         </div>
-        <div id="optionsContainer" class="mt-3"></div>
         <form id="messageForm" class="mt-3">
           <div class="input-group">
             <textarea id="messageInput" class="form-control" placeholder="Escribe un mensaje..." rows="3"></textarea>
@@ -76,7 +88,7 @@
 
   <script>
     $(document).ready(function() {
-      var patients = [
+      var pacientes = [
         { id: 1, name: 'Paciente 1' },
         { id: 2, name: 'Paciente 2' }
       ];
@@ -86,123 +98,65 @@
         2: []
       };
 
-      var isChatbotActive = false;
-      var currentPatientId = null;
+      var currentIdpac = null;
 
-      var chatbotOptions = [
-        { text: "¿Cómo puedo agendar una cita?", response: "Para agendar una cita, por favor visita la sección 'Cita' en el menú superior o llama al número 5586765506." + "\n¿Tiene alguna otra duda?"},
-        { text: "¿Cuál es el horario de atención?", response: "El horario de atención varia según la clinica sin embargo puedes verlo en el mapa de clinicas cercanas." + " \n¿Tiene alguna otra duda?"},
-        { text: "¿Qué hago en caso de emergencia?", response: "Si tienes una emergencia médica, por favor llama inmediatamente al número de emergencias de tu localidad (911 en muchos países)." + " \n¿Tiene alguna otra duda?"},
-        { text: "No veo mi cita", response: "Podría agendar una nueva o en su defecto comuníquese a la clinica en la que agendo para confirmar la cita." + "\n¿Tiene alguna otra duda?"}
-      ];
-
-      function loadPatients() {
-        var patientList = $('#patientList');
-        patientList.empty();
-        patients.forEach(function(patient) {
-          patientList.append('<li id="patient_' + patient.id + '" class="list-group-item d-flex justify-content-between align-items-center">' + patient.name + '<span class="badge badge-primary badge-pill">Activo</span></li>');
+      function loadpacientes() {
+        var pacienteList = $('#pacienteList');
+        pacienteList.empty();
+        pacientes.forEach(function(paciente) {
+          pacienteList.append('<li id="paciente_' + paciente.id + '" class="list-group-item d-flex justify-content-between align-items-center">' + paciente.name + '<span class="badge badge-primary badge-pill">Activo</span></li>');
         });
       }
 
-      function loadMessages(patientId) {
+      function loadMessages(idpac) {
         var messageList = $('#messageList');
         messageList.empty();
-        if (messages.hasOwnProperty(patientId)) {
-          messages[patientId].forEach(function(message) {
+        if (messages.hasOwnProperty(Idpac)) {
+          messages[Idpac].forEach(function(message) {
             var senderClass = (message.sender === 'doctor') ? 'text-primary' : 'text-secondary';
             messageList.append('<div class="list-group-item"><small class="' + senderClass + '">' + message.sender + '</small><p class="mb-1">' + message.message + '</p><small>Fecha: ' + message.date + '</small></div>');
           });
         }
+        $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
       }
 
-      function displayChatbotOptions() {
-        var optionsContainer = $('#optionsContainer');
-        optionsContainer.empty();
-        chatbotOptions.forEach(function(option, index) {
-          optionsContainer.append('<button class="btn btn-outline-primary option-button m-1" data-index="' + index + '">' + option.text + '</button>');
-        });
-      }
+      loadpacientes();
 
-      function resetChatbot() {
-        $('#messageList').empty();
-        $('#optionsContainer').empty();
-        if (isChatbotActive) {
-          $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">Hola, soy el asistente virtual de Medicgenely. ¿En qué puedo ayudarte?</p></div>');
-          displayChatbotOptions();
-        }
-      }
-
-      loadPatients();
-
-      $('#patientList').on('click', 'li', function() {
-        currentPatientId = $(this).attr('id').split('_')[1];
-        $('#patientList li').removeClass('active');
+      $('#pacienteList').on('click', 'li', function() {
+        currentIdpac = $(this).attr('id').split('_')[1];
+        $('#pacienteList li').removeClass('active');
         $(this).addClass('active');
-        if (isChatbotActive) {
-          resetChatbot();
-        } else {
-          loadMessages(currentPatientId);
-        }
-      });
-
-      $('#activateChatbot').click(function() {
-        isChatbotActive = !isChatbotActive;
-        $(this).text(isChatbotActive ? "Desactivar Chatbot" : "Activar Chatbot");
-        $('#messageList').empty();
-        $('#optionsContainer').empty();
-        if (isChatbotActive) {
-          resetChatbot();
-          $('#optionsContainer').show();
-        } else {
-          $('#optionsContainer').hide();
-          if (currentPatientId) {
-            loadMessages(currentPatientId);
-          }
-        }
-      });
-
-      $('#optionsContainer').on('click', '.option-button', function() {
-        var index = $(this).data('index');
-        var selectedOption = chatbotOptions[index];
-        
-        $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Tú</small><p class="mb-1">' + selectedOption.text + '</p></div>');
-        
-        setTimeout(function() {
-          $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">' + selectedOption.response + '</p></div>');
-          $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
-        }, 500);
+        loadMessages(currentIdpac);
       });
 
       $('#messageForm').submit(function(e) {
         e.preventDefault();
         var messageInput = $('#messageInput').val().trim();
-        if (messageInput !== '') {
+        if (messageInput !== '' && currentIdpac) {
           var newMessage = { sender: 'doctor', message: messageInput, date: new Date().toLocaleString() };
           
-          $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Tú</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
-          
-          if (isChatbotActive) {
-            setTimeout(function() {
-              $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">Lo siento, no puedo entender tu pregunta. Por favor, selecciona una de las opciones disponibles.</p></div>');
-            }, 500);
-          } else if (currentPatientId) {
-            if (!messages[currentPatientId]) {
-              messages[currentPatientId] = [];
-            }
-            messages[currentPatientId].push(newMessage);
+          if (!messages[currentIdpac]) {
+            messages[currentIdpac] = [];
           }
+          messages[currentIdpac].push(newMessage);
+          
+          $('#messageList').append('<div class="list-group-item"><small class="text-primary">Doctor</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
           
           $('#messageInput').val('');
           $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
+
+          // Simular respuesta del paciente después de 2 segundos
+          setTimeout(function() {
+            var pacienteResponse = { sender: 'paciente', message: 'Gracias por su mensaje, doctor.', date: new Date().toLocaleString() };
+            messages[currentIdpac].push(pacienteResponse);
+            $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Paciente</small><p class="mb-1">' + pacienteResponse.message + '</p><small>Fecha: ' + pacienteResponse.date + '</small></div>');
+            $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
+          }, 2000);
         }
       });
 
-      function setClientId(id) {
-        $('#clientId').val(id);
-      }
-
-      // Ejemplo de uso:
-      setClientId("12345");
+      // Seleccionar el primer paciente por defecto
+      $('#pacienteList li:first').click();
     });
   </script>
 </body>
