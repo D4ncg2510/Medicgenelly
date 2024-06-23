@@ -47,6 +47,7 @@ button:hover {
 
 #addSintomaBtn, #addFactorBtn, #addAntecedenteBtn, #addHistorialBtn {
     margin-bottom: 16px;
+    width: fit-content;
 }
 
 #loginBtn {
@@ -90,7 +91,7 @@ button:hover {
 
 .form-container button {
     display: block;
-    width: 100%;           /* Hacer que el botón ocupe todo el ancho */
+    width: 15%;           /* Hacer que el botón ocupe todo el ancho */
     margin-top: 10px;      /* Espacio superior entre botones */
 }
 
