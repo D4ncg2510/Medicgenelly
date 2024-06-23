@@ -20,6 +20,8 @@
       overflow-y: scroll;
     }
   </style>
+
+  <script src="https://unpkg.com/wit-js@0.1.1/dist/wit.min.js"></script>
 </head>
 <body>
 
@@ -78,7 +80,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/node-wit@6.0.0/dist/wit.min.js"></script>
-  <script src="https://unpkg.com/wit-js@0.1.1/dist/wit.min.js"></script>
+  
 
   <script>
     $(document).ready(function() {
@@ -94,6 +96,7 @@
 
       var isChatbotActive = false;
       var currentPatientId = null;
+      var witClient = null;
 
       const client = new Wit({accessToken: 'IA2UZRV5K5OFRZPJURTI5AGMLWLVZE6T'});
 
@@ -159,6 +162,10 @@
         $('#messageList').empty();
         $('#optionsContainer').empty();
         if (isChatbotActive) {
+          // Inicializar el cliente de wit.ai solo cuando se activa el chatbot
+          if (!witClient) {
+            witClient = new Wit({accessToken: 'TU_TOKEN_DE_ACCESO'});
+          }
           resetChatbot();
           $('#optionsContainer').show();
         } else {
@@ -169,38 +176,38 @@
         }
       });
 
-        $('#messageForm').submit(function(e) {
-      e.preventDefault();
-      var messageInput = $('#messageInput').val().trim();
-      if (messageInput !== '') {
-        var newMessage = { sender: 'doctor', message: messageInput, date: new Date().toLocaleString() };
-        
-        $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Tú</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
-        
-        if (isChatbotActive) {
-          // Procesar el mensaje con wit.ai
-          client.message(messageInput)
-            .then((data) => {
-              console.log('Respuesta de Wit.ai:', data);
-              var botResponse = procesarRespuestaWit(data);
-              
-              setTimeout(function() {
-                $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">' + botResponse + '</p></div>');
-                $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
-              }, 500);
-            })
-            .catch(console.error);
-        } else if (currentPatientId) {
-          if (!messages[currentPatientId]) {
-            messages[currentPatientId] = [];
-          }
-          messages[currentPatientId].push(newMessage);
+      $('#messageForm').submit(function(e) {
+    e.preventDefault();
+    var messageInput = $('#messageInput').val().trim();
+    if (messageInput !== '') {
+      var newMessage = { sender: 'doctor', message: messageInput, date: new Date().toLocaleString() };
+      
+      $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Tú</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
+      
+      if (isChatbotActive && witClient) {
+        // Procesar el mensaje con wit.ai
+        witClient.message(messageInput)
+          .then((data) => {
+            console.log('Respuesta de Wit.ai:', data);
+            var botResponse = procesarRespuestaWit(data);
+            
+            setTimeout(function() {
+              $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">' + botResponse + '</p></div>');
+              $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
+            }, 500);
+          })
+          .catch(console.error);
+      } else if (currentPatientId) {
+        if (!messages[currentPatientId]) {
+          messages[currentPatientId] = [];
         }
-        
-        $('#messageInput').val('');
-        $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
+        messages[currentPatientId].push(newMessage);
       }
-    });
+      
+      $('#messageInput').val('');
+      $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
+    }
+  });
 
     function procesarRespuestaWit(data) {
       if (data.intents.length > 0) {
