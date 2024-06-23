@@ -96,9 +96,6 @@
 
       var isChatbotActive = false;
       var currentPatientId = null;
-      var witClient = null;
-
-      const client = new Wit({accessToken: 'IA2UZRV5K5OFRZPJURTI5AGMLWLVZE6T'});
 
       var chatbotOptions = [
         { text: "¿Cómo puedo agendar una cita?", response: "Para agendar una cita, por favor visita la sección 'Cita' en el menú superior o llama al número 5586765506." + "\n¿Tiene alguna otra duda?"},
@@ -162,10 +159,6 @@
         $('#messageList').empty();
         $('#optionsContainer').empty();
         if (isChatbotActive) {
-          // Inicializar el cliente de wit.ai solo cuando se activa el chatbot
-          if (!witClient) {
-            witClient = new Wit({accessToken: 'TU_TOKEN_DE_ACCESO'});
-          }
           resetChatbot();
           $('#optionsContainer').show();
         } else {
@@ -175,60 +168,6 @@
           }
         }
       });
-
-      $('#messageForm').submit(function(e) {
-    e.preventDefault();
-    var messageInput = $('#messageInput').val().trim();
-    if (messageInput !== '') {
-      var newMessage = { sender: 'doctor', message: messageInput, date: new Date().toLocaleString() };
-      
-      $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Tú</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
-      
-      if (isChatbotActive && witClient) {
-        // Procesar el mensaje con wit.ai
-        witClient.message(messageInput)
-          .then((data) => {
-            console.log('Respuesta de Wit.ai:', data);
-            var botResponse = procesarRespuestaWit(data);
-            
-            setTimeout(function() {
-              $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">' + botResponse + '</p></div>');
-              $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
-            }, 500);
-          })
-          .catch(console.error);
-      } else if (currentPatientId) {
-        if (!messages[currentPatientId]) {
-          messages[currentPatientId] = [];
-        }
-        messages[currentPatientId].push(newMessage);
-      }
-      
-      $('#messageInput').val('');
-      $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
-    }
-  });
-
-    function procesarRespuestaWit(data) {
-      if (data.intents.length > 0) {
-        switch(data.intents[0].name) {
-          case 'agendar_cita':
-            return "Para agendar una cita, por favor visita la sección 'Cita' en el menú superior o llama al número 5586765506. ¿Tienes alguna otra duda?";
-          case 'horario_atencion':
-            return "El horario de atención varía según la clínica. Puedes verlo en el mapa de clínicas cercanas. ¿Tienes alguna otra duda?";
-          case 'emergencia':
-            return "Si tienes una emergencia médica, por favor llama inmediatamente al número de emergencias de tu localidad (911 en muchos países). ¿Tienes alguna otra duda?";
-          case 'cita_no_visible':
-            return "Podrías agendar una nueva o en su defecto comunícate a la clínica en la que agendaste para confirmar la cita. ¿Tienes alguna otra duda?";
-          default:
-            return "Lo siento, no estoy seguro de cómo ayudarte con eso. ¿Podrías ser más específico?";
-        }
-      } else {
-        return "Lo siento, no entendí tu pregunta. ¿Podrías reformularla?";
-      }
-    }
-
- 
 
       $('#optionsContainer').on('click', '.option-button', function() {
         var index = $(this).data('index');
@@ -273,6 +212,6 @@
       // Ejemplo de uso:
       setClientId("12345");
     });
-  </script>
+  </script> 
 </body>
 </html>
