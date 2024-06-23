@@ -28,10 +28,7 @@ input, textarea, select {
 
 button {
     padding: 10px 15px;
-    background-color: #03735;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
+    background-color: #037353;
     font-size: 16px;
     cursor: pointer;
 }
