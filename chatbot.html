@@ -80,13 +80,7 @@
   <script src="https://unpkg.com/node-wit@6.0.0/dist/wit.min.js"></script>
 
   <script>
-    $(document).ready(function() {
-      var patients = [
-        { id: 1, name: 'Paciente 1' },
-        { id: 2, name: 'Paciente 2' }
-      ];
-
-      const witClient = new Wit({
+    const witClient = new Wit({
       accessToken: 'T1673741113439339I'
     });
 
@@ -147,6 +141,11 @@
         }, 1000);
       }
     });
+    $(document).ready(function() {
+      var patients = [
+        { id: 1, name: 'Paciente 1' },
+        { id: 2, name: 'Paciente 2' }
+      ];
 
       var messages = {
         1: [],
