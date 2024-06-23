@@ -80,67 +80,6 @@
   <script src="https://unpkg.com/node-wit@6.0.0/dist/wit.min.js"></script>
 
   <script>
-    const witClient = new Wit({
-      accessToken: 'T1673741113439339I'
-    });
-
-    async function processMessageWithWit(message) {
-      try {
-        const response = await witClient.message(message);
-        return handleWitResponse(response);
-      } catch (error) {
-        console.error('Error al procesar el mensaje con wit.ai:', error);
-        return "Lo siento, hubo un error al procesar tu mensaje. Por favor, inténtalo de nuevo.";
-      }
-    }
-
-    function handleWitResponse(witResponse) {
-      // Aquí puedes manejar la respuesta de wit.ai según tus intenciones y entidades
-      const intent = witResponse.intents[0]?.name;
-      const entities = witResponse.entities;
-
-      switch (intent) {
-        case 'saludo':
-          return "Hola, ¿en qué puedo ayudarte hoy?";
-        case 'agendar_cita':
-          // Lógica para agendar cita
-          return "Claro, puedo ayudarte a agendar una cita. ¿Para qué fecha te gustaría?";
-        case 'sintomas':
-          // Lógica para manejar síntomas
-          return "Entiendo que no te sientes bien. ¿Puedes describir tus síntomas con más detalle?";
-        // Añade más casos según tus intenciones
-        default:
-          return "No estoy seguro de cómo ayudarte con eso. ¿Podrías reformular tu pregunta?";
-      }
-    }
-
-    $('#messageForm').submit(async function(e) {
-      e.preventDefault();
-      var messageInput = $('#messageInput').val().trim();
-      if (messageInput !== '' && currentDoctorId) {
-        var newMessage = { sender: 'patient', message: messageInput, date: new Date().toLocaleString() };
-        
-        if (!messages[currentDoctorId]) {
-          messages[currentDoctorId] = [];
-        }
-        messages[currentDoctorId].push(newMessage);
-        
-        $('#messageList').append('<div class="list-group-item"><small class="text-primary">Paciente</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
-        
-        $('#messageInput').val('');
-        $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
-
-        // Procesar el mensaje con wit.ai y obtener una respuesta
-        const witResponse = await processMessageWithWit(messageInput);
-        
-        setTimeout(function() {
-          var doctorResponse = { sender: 'doctor', message: witResponse, date: new Date().toLocaleString() };
-          messages[currentDoctorId].push(doctorResponse);
-          $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Doctor</small><p class="mb-1">' + doctorResponse.message + '</p><small>Fecha: ' + doctorResponse.date + '</small></div>');
-          $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
-        }, 1000);
-      }
-    });
     $(document).ready(function() {
       var patients = [
         { id: 1, name: 'Paciente 1' },
