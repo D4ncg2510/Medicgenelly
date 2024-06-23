@@ -37,7 +37,7 @@
             <a class="nav-link" href="formulario.html">Cita</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="doctors.html">Perfil</a>
+            <a class="nav-link" href="patient_profile.html">Perfil</a>
           </li>
           <li class="nav-item">
             <a class="btn btn-primary ml-lg-3" href="login.html">Salir</a>
@@ -50,21 +50,21 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-4">
-        <h2>Pacientes</h2>
-        <ul id="pacienteList" class="list-group">
-          <!-- Aquí se cargarán los pacientes -->
+        <h2>Mis Doctores</h2>
+        <ul id="doctorList" class="list-group">
+          <!-- Aquí se cargarán los doctores -->
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Paciente 1
-            <span class="badge badge-primary badge-pill">Activo</span>
+            Doctor 1
+            <span class="badge badge-primary badge-pill">Disponible</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Paciente 2
-            <span class="badge badge-secondary badge-pill">Offline</span>
+            Doctor 2
+            <span class="badge badge-secondary badge-pill">Ocupado</span>
           </li>
         </ul>
       </div>
       <div class="col-md-8">
-        <input type="hidden" id="clientId" value="">
+        <input type="hidden" id="patientId" value="">
         <div class="chat-container">
           <div id="messageList" class="list-group">
             <!-- Aquí se cargarán los mensajes -->
@@ -88,9 +88,9 @@
 
   <script>
     $(document).ready(function() {
-      var pacientes = [
-        { id: 1, name: 'Paciente 1' },
-        { id: 2, name: 'Paciente 2' }
+      var doctors = [
+        { id: 1, name: 'Doctor 1' },
+        { id: 2, name: 'Doctor 2' }
       ];
 
       var messages = {
@@ -98,65 +98,65 @@
         2: []
       };
 
-      var currentIdpac = null;
+      var currentDoctorId = null;
 
-      function loadpacientes() {
-        var pacienteList = $('#pacienteList');
-        pacienteList.empty();
-        pacientes.forEach(function(paciente) {
-          pacienteList.append('<li id="paciente_' + paciente.id + '" class="list-group-item d-flex justify-content-between align-items-center">' + paciente.name + '<span class="badge badge-primary badge-pill">Activo</span></li>');
+      function loadDoctors() {
+        var doctorList = $('#doctorList');
+        doctorList.empty();
+        doctors.forEach(function(doctor) {
+          doctorList.append('<li id="doctor_' + doctor.id + '" class="list-group-item d-flex justify-content-between align-items-center">' + doctor.name + '<span class="badge badge-primary badge-pill">Disponible</span></li>');
         });
       }
 
-      function loadMessages(idpac) {
+      function loadMessages(doctorId) {
         var messageList = $('#messageList');
         messageList.empty();
-        if (messages.hasOwnProperty(Idpac)) {
-          messages[Idpac].forEach(function(message) {
-            var senderClass = (message.sender === 'doctor') ? 'text-primary' : 'text-secondary';
+        if (messages.hasOwnProperty(doctorId)) {
+          messages[doctorId].forEach(function(message) {
+            var senderClass = (message.sender === 'patient') ? 'text-primary' : 'text-secondary';
             messageList.append('<div class="list-group-item"><small class="' + senderClass + '">' + message.sender + '</small><p class="mb-1">' + message.message + '</p><small>Fecha: ' + message.date + '</small></div>');
           });
         }
         $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
       }
 
-      loadpacientes();
+      loadDoctors();
 
-      $('#pacienteList').on('click', 'li', function() {
-        currentIdpac = $(this).attr('id').split('_')[1];
-        $('#pacienteList li').removeClass('active');
+      $('#doctorList').on('click', 'li', function() {
+        currentDoctorId = $(this).attr('id').split('_')[1];
+        $('#doctorList li').removeClass('active');
         $(this).addClass('active');
-        loadMessages(currentIdpac);
+        loadMessages(currentDoctorId);
       });
 
       $('#messageForm').submit(function(e) {
         e.preventDefault();
         var messageInput = $('#messageInput').val().trim();
-        if (messageInput !== '' && currentIdpac) {
-          var newMessage = { sender: 'doctor', message: messageInput, date: new Date().toLocaleString() };
+        if (messageInput !== '' && currentDoctorId) {
+          var newMessage = { sender: 'patient', message: messageInput, date: new Date().toLocaleString() };
           
-          if (!messages[currentIdpac]) {
-            messages[currentIdpac] = [];
+          if (!messages[currentDoctorId]) {
+            messages[currentDoctorId] = [];
           }
-          messages[currentIdpac].push(newMessage);
+          messages[currentDoctorId].push(newMessage);
           
-          $('#messageList').append('<div class="list-group-item"><small class="text-primary">Doctor</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
+          $('#messageList').append('<div class="list-group-item"><small class="text-primary">Paciente</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
           
           $('#messageInput').val('');
           $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
 
-          // Simular respuesta del paciente después de 2 segundos
+          // Simular respuesta del doctor después de 2 segundos
           setTimeout(function() {
-            var pacienteResponse = { sender: 'paciente', message: 'Gracias por su mensaje, doctor.', date: new Date().toLocaleString() };
-            messages[currentIdpac].push(pacienteResponse);
-            $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Paciente</small><p class="mb-1">' + pacienteResponse.message + '</p><small>Fecha: ' + pacienteResponse.date + '</small></div>');
+            var doctorResponse = { sender: 'doctor', message: 'Gracias por su mensaje. ¿En qué puedo ayudarle?', date: new Date().toLocaleString() };
+            messages[currentDoctorId].push(doctorResponse);
+            $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Doctor</small><p class="mb-1">' + doctorResponse.message + '</p><small>Fecha: ' + doctorResponse.date + '</small></div>');
             $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
           }, 2000);
         }
       });
 
-      // Seleccionar el primer paciente por defecto
-      $('#pacienteList li:first').click();
+      // Seleccionar el primer doctor por defecto
+      $('#doctorList li:first').click();
     });
   </script>
 </body>
