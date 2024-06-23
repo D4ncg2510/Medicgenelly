@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="LOGOs.png">
+    <meta name="copyright" content="MACode ID, https://macodeid.com/">
+    <title>Medicgenely</title>
+  
+    <!-- Verifica estas rutas, deben ser correctas según la ubicación de tu archivo HTML -->
+    <link rel="stylesheet" href="maicons.css">
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="owl.carousel.css">
+    <link rel="stylesheet" href="animate.css">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="stylogin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+        <div class="container10">
+            <a class="navbar-brand" href="index.html"><span class="text-primary">Medic</span>genely</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport" aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupport">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="formulario.html">Asesoramiento</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="doctors.html">Doctores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">Acerca de</a>
+                    </li>
+                    <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    -->
+                </ul>
+            </div> <!-- .navbar-collapse -->
+        </div> <!-- .container -->
+    </nav>
+    <!--registro-->
+    <div class="container" id="container">
+      <div class="form-container sign-up">
+        <form action="php/registro_usu.php" method="post" class="formulario_reg">
+            <h1>Crear cuenta</h1>
+            <div class="social-icons">
+                <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+            </div>
+            <span>o utilice su correo electrónico para registrarse:</span>
+            <input type="text" placeholder="Nombre" name="Nombre">
+            <input type="email" placeholder="Correo electrónico"  name="Correo">
+            <input type="password" placeholder="Constraseña" name="Constraseña">
+            <button>Iniciar sesión</button>
+        </form>
+        </div>
+        <!--ES LA PARTE DEL LOGIN ES DECIR INICIAR SESION-->
+        <div class="form-container sign-in">
+            <form action="php/login_usua.php" class="formulario_log">
+                <h1>Iniciar sesión</h1>
+                <span>Utilice su contraseña de correo electrónico:</span>
+                <input type="email" placeholder="Correo electrónico" required="">
+                <input type="password" placeholder="Contraseña" required="">
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>¿Ya tienes cuenta?</h1>
+                    <p>Inicia sesión para entrar en la pagina</p>
+                    <button class="hidden" id="login">Iniciar sesión</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>¡Bienvenido!</h1>
+                    <p>Si no tiene una cuenta, regístrese.</p>
+                    <button class="hidden" id="register">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
