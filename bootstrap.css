@@ -3598,7 +3598,7 @@ input[type="button"].btn-block {
   flex: 1 1 auto;
   width: 1%;
   min-width: 0;
-  margin-bottom: 0;
+  margin-bottom: 15%;
 }
 
 .input-group > .form-control + .form-control,
@@ -3772,6 +3772,7 @@ input[type="button"].btn-block {
 .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child) {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  argin-bottom: 15%;
 }
 
 .custom-control {
