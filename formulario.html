@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="estilo.css">
+  <script defer src="script.js"></script>
+  <meta name="copyright" content="MACode ID, https://macodeid.com/">
+    <link rel="icon" href="LOGOs.png">
+  <title>Medicgenely</title>
+  
+  <link rel="stylesheet" href="maicons.css">
+  <link rel="stylesheet" href="bootstrap.css">
+  <link rel="stylesheet" href="owl.carousel.css">
+  <link rel="stylesheet" href="animate.css">
+  <link rel="stylesheet" href="theme.css">
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+    }
+  </style>
+</head>
+<body>
+
+  
+
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+    <div class="container10">
+      <a class="navbar-brand" href="index.html"><span class="text-primary">Medic</span>genely</a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport" aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupport">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="formulario.html">Asesoramiento</a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="doctors.html">Doctores</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">Acerca de</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary ml-lg-3" href="login.html">Iniciar sesión</a>
+          </li>
+        </ul>
+      </div> <!-- .navbar-collapse -->
+    </div> <!-- .container -->
+  </nav>
+</header>
+
+
+  <div class="page-banner overlay-dark bg-image" style="background-image: url(fondo12.jpg);">
+    <div class="banner-section">
+      <div class="container10 text-center wow fadeInUp">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb breadcrumb-dark bg-transparent justify-content-center py-0 mb-2">
+            <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Asesoramiento</li>
+          </ol>
+        </nav>
+        <h1 class="font-weight-normal">Registrar sintomas</h1>
+      </div> <!-- .container -->
+    </div> <!-- .banner-section -->
+  </div> <!-- .page-banner -->
+  
+  
+  <div class="container10 mt-4">
+    <div class="form-container">
+        <form id="sintomasForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad" required>
+
+            <label for="sexo">Sexo:</label>
+            <select id="sexo" name="sexo" required>
+                <option value="">Selecciona tu sexo</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+                <option value="otro">Otro</option>
+            </select>
+
+            <label>Síntomas:</label>
+            <div id="sintomasContainer"></div>
+            <button  type="button" id="addSintomaBtn">Agregar otro síntoma</button>
+
+            <label for="descripcion">Descripción del Síntoma:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+
+            <label for="duracion">Duración del Síntoma (días):</label>
+            <input type="number" id="duracion" name="duracion" required>
+
+            <label for="intensidad">Intensidad del Síntoma:</label>
+            <select id="intensidad" name="intensidad" required>
+                <option value="leve">Leve</option>
+                <option value="moderada">Moderada</option>
+                <option value="severa">Severa</option>
+            </select>
+
+            <label>Factores desencadenantes o agravantes: <span class="small">(situaciones, actividades, sustancias o condiciones que empeoran o provocan la aparición de los síntomas)</span></label>
+            <div id="factoresContainer"></div>
+            <button type="button" id="addFactorBtn">Agregar factor</button>
+
+            <label>Antecedentes médicos: <span class="small">(enfermedades, afecciones, cirugías o lesiones previas que ha padecido el paciente)</span></label>
+            <div id="antecedentesContainer"></div>
+            <button type="button" id="addAntecedenteBtn">Agregar antecedente</button>
+
+            <button type="submit">Registrar</button>
+        </form>
+        <script>
+          $('#pacienteForm').submit(function(event) {
+              event.preventDefault(); 
+      
+              var formData = $(this).serialize();
+      
+              $.ajax({
+                  type: 'POST',
+                  url: 'insert.php', 
+                  data: formData,
+                  success: function(response) {
+                      // Manejar la respuesta del servidor
+                      console.log(response);
+                  },
+                  error: function() {
+
+                      console.log('Error en la solicitud AJAX');
+                  }
+              });
+          });
+      </script>
+        <button type="submit" value="Iniciar Sesion">Inicio de sesión</button>
+    </div>
+</div>
+
+</body>
+</html>
