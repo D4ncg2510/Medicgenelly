@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="copyright" content="MACode ID, https://macodeid.com/">
-  <link rel="icon" href="LOGOs.png">
+  <link rel="icon" href="../assets/img/LOGOs.png">
   <title>Medicgenely</title>
-  <link rel="stylesheet" href="maicons.css">
-  <link rel="stylesheet" href="bootstrap.css">
-  <link rel="stylesheet" href="owl.carousel.css">
-  <link rel="stylesheet" href="animate.css">
-  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="../assets/css/maicons.css">
+  <link rel="stylesheet" href="../assets/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/vendor/owl-carousel/css/owl.carousel.css">
+  <link rel="stylesheet" href="../assets/vendor/animate/animate.css">
+  <link rel="stylesheet" href="../assets/css/theme.css">
   <style>
     /* Custom CSS styles */
     .chat-container {
@@ -22,30 +22,30 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <div class="container10">
-          <a class="navbar-brand" href="index.html"><span class="text-primary">Medic</span>genely</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport" aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupport">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="index.html">Inicio</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="formulario.html">Cita</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="doctors.html">Perfil</a>
-              </li>
-              <li class="nav-item">
-                <a class="btn btn-primary ml-lg-3" href="login.html">Salir</a>
-              </li>
-            </ul>
-          </div> <!-- .navbar-collapse -->
-        </div> <!-- .container -->
-      </nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container10">
+      <a class="navbar-brand" href="index.html"><span class="text-primary">Medic</span>genely</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport" aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupport">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="formulario.html">Cita</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="doctors.html">Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary ml-lg-3" href="login.html">Salir</a>
+          </li>
+        </ul>
+      </div> <!-- .navbar-collapse -->
+    </div> <!-- .container -->
+  </nav>
 
   <div class="container mt-5">
     <div class="row">
@@ -64,11 +64,14 @@
         </ul>
       </div>
       <div class="col-md-8">
+        <input type="hidden" id="clientId" value="">
+        <button id="activateChatbot" class="btn btn-secondary mb-3">Activar Chatbot</button>
         <div class="chat-container">
           <div id="messageList" class="list-group">
             <!-- Aquí se cargarán los mensajes -->
           </div>
         </div>
+        <div id="optionsContainer" class="mt-3"></div>
         <form id="messageForm" class="mt-3">
           <div class="input-group">
             <textarea id="messageInput" class="form-control" placeholder="Escribe un mensaje..." rows="3"></textarea>
@@ -81,43 +84,43 @@
     </div>
   </div>
 
-  <!-- jQuery y Bootstrap JS (reemplazar con las últimas versiones si es necesario) -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <!-- Script para la lista de pacientes y mensajes -->
   <script>
     $(document).ready(function() {
-      // Datos simulados de pacientes y mensajes (para pruebas)
       var patients = [
         { id: 1, name: 'Paciente 1' },
         { id: 2, name: 'Paciente 2' }
       ];
 
       var messages = {
-        1: [ // Mensajes con Paciente 1
-          { sender: 'doctor', message: 'Hola, ¿cómo estás?', date: '2024-06-16 10:00 AM' },
-          { sender: 'patient', message: 'Bien, gracias. Tengo una pregunta sobre mi tratamiento.', date: '2024-06-16 10:05 AM' }
-        ],
-        2: [ // Mensajes con Paciente 2
-          { sender: 'doctor', message: 'Recuerda tomar la medicación a las 10 PM.', date: '2024-06-15 08:00 PM' }
-        ]
+        1: [],
+        2: []
       };
 
-      // Función para cargar la lista de pacientes
+      var isChatbotActive = false;
+      var currentPatientId = null;
+
+      var chatbotOptions = [
+        { text: "¿Cómo puedo agendar una cita?", response: "Para agendar una cita, por favor visita la sección 'Cita' en el menú superior o llama al número 5586765506." + "\n¿Tiene alguna otra duda?"},
+        { text: "¿Cuál es el horario de atención?", response: "El horario de atención varia según la clinica sin embargo puedes verlo en el mapa de clinicas cercanas." + " \n¿Tiene alguna otra duda?"},
+        { text: "¿Qué hago en caso de emergencia?", response: "Si tienes una emergencia médica, por favor llama inmediatamente al número de emergencias de tu localidad (911 en muchos países)." + " \n¿Tiene alguna otra duda?"},
+        { text: "No veo mi cita", response: "Podría agendar una nueva o en su defecto comuníquese a la clinica en la que agendo para confirmar la cita." + "\n¿Tiene alguna otra duda?"}
+      ];
+
       function loadPatients() {
         var patientList = $('#patientList');
-        patientList.empty(); // Limpiar lista antes de cargar nuevos pacientes
+        patientList.empty();
         patients.forEach(function(patient) {
           patientList.append('<li id="patient_' + patient.id + '" class="list-group-item d-flex justify-content-between align-items-center">' + patient.name + '<span class="badge badge-primary badge-pill">Activo</span></li>');
         });
       }
 
-      // Función para cargar los mensajes con un paciente específico
       function loadMessages(patientId) {
         var messageList = $('#messageList');
-        messageList.empty(); // Limpiar lista antes de cargar nuevos mensajes
+        messageList.empty();
         if (messages.hasOwnProperty(patientId)) {
           messages[patientId].forEach(function(message) {
             var senderClass = (message.sender === 'doctor') ? 'text-primary' : 'text-secondary';
@@ -126,30 +129,94 @@
         }
       }
 
-      // Cargar pacientes al cargar la página
+      function displayChatbotOptions() {
+        var optionsContainer = $('#optionsContainer');
+        optionsContainer.empty();
+        chatbotOptions.forEach(function(option, index) {
+          optionsContainer.append('<button class="btn btn-outline-primary option-button m-1" data-index="' + index + '">' + option.text + '</button>');
+        });
+      }
+
+      function resetChatbot() {
+        $('#messageList').empty();
+        $('#optionsContainer').empty();
+        if (isChatbotActive) {
+          $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">Hola, soy el asistente virtual de Medicgenely. ¿En qué puedo ayudarte?</p></div>');
+          displayChatbotOptions();
+        }
+      }
+
       loadPatients();
 
-      // Evento para cambiar de paciente y cargar mensajes
       $('#patientList').on('click', 'li', function() {
-        var patientId = $(this).attr('id').split('_')[1]; // Obtener el ID del paciente
-        loadMessages(patientId);
-        // Simular cambio de paciente activo (actualmente solo un estilo visual, no persiste)
+        currentPatientId = $(this).attr('id').split('_')[1];
         $('#patientList li').removeClass('active');
         $(this).addClass('active');
+        if (isChatbotActive) {
+          resetChatbot();
+        } else {
+          loadMessages(currentPatientId);
+        }
       });
 
-      // Evento para enviar un mensaje
+      $('#activateChatbot').click(function() {
+        isChatbotActive = !isChatbotActive;
+        $(this).text(isChatbotActive ? "Desactivar Chatbot" : "Activar Chatbot");
+        $('#messageList').empty();
+        $('#optionsContainer').empty();
+        if (isChatbotActive) {
+          resetChatbot();
+          $('#optionsContainer').show();
+        } else {
+          $('#optionsContainer').hide();
+          if (currentPatientId) {
+            loadMessages(currentPatientId);
+          }
+        }
+      });
+
+      $('#optionsContainer').on('click', '.option-button', function() {
+        var index = $(this).data('index');
+        var selectedOption = chatbotOptions[index];
+        
+        $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Tú</small><p class="mb-1">' + selectedOption.text + '</p></div>');
+        
+        setTimeout(function() {
+          $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">' + selectedOption.response + '</p></div>');
+          $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
+        }, 500);
+      });
+
       $('#messageForm').submit(function(e) {
         e.preventDefault();
         var messageInput = $('#messageInput').val().trim();
         if (messageInput !== '') {
-          var activePatientId = $('#patientList li.active').attr('id').split('_')[1]; // Obtener el ID del paciente activo
           var newMessage = { sender: 'doctor', message: messageInput, date: new Date().toLocaleString() };
-          messages[activePatientId].push(newMessage); // Agregar mensaje al arreglo de mensajes
-          $('#messageInput').val(''); // Limpiar campo de mensaje
-          loadMessages(activePatientId); // Volver a cargar mensajes
+          
+          $('#messageList').append('<div class="list-group-item"><small class="text-secondary">Tú</small><p class="mb-1">' + messageInput + '</p><small>Fecha: ' + newMessage.date + '</small></div>');
+          
+          if (isChatbotActive) {
+            setTimeout(function() {
+              $('#messageList').append('<div class="list-group-item"><small class="text-primary">Chatbot</small><p class="mb-1">Lo siento, no puedo entender tu pregunta. Por favor, selecciona una de las opciones disponibles.</p></div>');
+            }, 500);
+          } else if (currentPatientId) {
+            if (!messages[currentPatientId]) {
+              messages[currentPatientId] = [];
+            }
+            messages[currentPatientId].push(newMessage);
+          }
+          
+          $('#messageInput').val('');
+          $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
         }
       });
+
+      function setClientId(id) {
+        $('#clientId').val(id);
+      }
+
+      // Ejemplo de uso:
+      setClientId("12345");
     });
   </script>
 </body>
